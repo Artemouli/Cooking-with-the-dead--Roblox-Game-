@@ -10,7 +10,7 @@ local removedOffPrepEvent = itemDrag:FindFirstChild("RemovedOffPrepEvent")
 local plateEvents = itemDrag:FindFirstChild("PlateEvents")
 local placedOnPlateEvent = plateEvents:FindFirstChild("PlacedOnPlateEvent")
 local removedOffPlateEvent = plateEvents:FindFirstChild("RemovedOffPlateEvent")
---local giveItemEvent = ReplicatedStorage:WaitForChild("CustomerEvents"):FindFirstChild("GiveCustomerItemEvent")
+local giveItemEvent = ReplicatedStorage:WaitForChild("CustomerEvents"):FindFirstChild("GiveCustomerItemEvent")
 
 -- Collision Group Setup
 local collisionGroups = {"CurrentPlayerGroup", "DraggableGroup", "PlateGroup", "TempPlateGroup"}
@@ -92,7 +92,6 @@ end
 
 -- Setup Function
 local function setupPickupable(pickupable)
-    print("at the start of setup")
     local dragDetector = pickupable:FindFirstChildOfClass("DragDetector")
     local grabbablePart = pickupable:FindFirstChildWhichIsA("BasePart")
     if not dragDetector or not grabbablePart then return warn("Missing DragDetector or BasePart for", pickupable.Name) end
@@ -149,13 +148,10 @@ local function setupPickupable(pickupable)
             grabbablePart:SetNetworkOwnershipAuto()
         end
     end)
-
-    print("at the end of setup")
 end
 
 -- Setup Existing and New Tagged Instances
 for _, instance in ipairs(CollectionService:GetTagged("Pickupable")) do
-    print("befr")
     setupPickupable(instance)
 end
 
