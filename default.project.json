@@ -12,7 +12,7 @@
         "$path": "src/server"
       },
       "PlayerItemDrag": {
-        "$path": "src/server/PlayerItemDrag"
+        "$path": "src/PlayerItemDrag"
       }
     },
 
