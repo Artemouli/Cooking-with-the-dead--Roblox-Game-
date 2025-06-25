@@ -11,11 +11,18 @@
     },
 
     "ServerScriptService": {
-      "Server": {
-        "$path": "src/server"
+        "$path": "src/server",
+      "MoneyManager": {
+        "$path": "src/server/MoneyManager"
+      },
+      "PowerSystem": {
+        "$path": "src/server/PowerSystem"
       },
       "PlayerItemDrag": {
-        "$path": "src/PlayerItemDrag"
+        "$path": "src/server/PlayerItemDrag"
+      },
+      "DoorSystem": {
+        "$path": "src/server/DoorSystem"
       }
     },
 

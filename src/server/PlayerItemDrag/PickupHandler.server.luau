@@ -10,7 +10,7 @@ local removedOffPrepEvent = itemDrag:FindFirstChild("RemovedOffPrepEvent")
 local plateEvents = itemDrag:FindFirstChild("PlateEvents")
 local placedOnPlateEvent = plateEvents:FindFirstChild("PlacedOnPlateEvent")
 local removedOffPlateEvent = plateEvents:FindFirstChild("RemovedOffPlateEvent")
-local giveItemEvent = ReplicatedStorage:WaitForChild("CustomerEvents"):FindFirstChild("GiveCustomerItemEvent")
+-- local giveItemEvent = ReplicatedStorage:WaitForChild("CustomerEvents"):FindFirstChild("GiveCustomerItemEvent")
 
 -- Collision Group Setup
 local collisionGroups = {"CurrentPlayerGroup", "DraggableGroup", "PlateGroup", "TempPlateGroup"}
