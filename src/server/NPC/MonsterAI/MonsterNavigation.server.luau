@@ -17,6 +17,8 @@ local DOOR_STATES = {
 	SecurityRoom = interactableDoors:FindFirstChild("SecurityRoomDoor"):FindFirstChild("DoorLocked"),
 }
 
+local waypoints = workspace:FindFirstChild("AI Waypoints"):FindFirstChild("Monster Waypoints"):GetChildren()
+
 local TEST_DESTINATION = Vector3.new(-444.27, 1.5, 68.05)
 
 -- Class constructor
@@ -158,6 +160,7 @@ end
 
 function Monster:RunAI()
 	while self.instance do
+		print("running ai")
 		self.instance.PrimaryPart:SetNetworkOwner(nil)
 
 		local target, distance = self:GetTarget()
@@ -167,13 +170,20 @@ function Monster:RunAI()
 			self.humanoid:MoveTo(target.HumanoidRootPart.Position)
 		elseif not self.navigating then
 			if self.playerLastKnownPos then
-				self:StartNavigation(self.playerLastKnownPos)
+				task.spawn(function()
+					self:StartNavigation(self.playerLastKnownPos)
+					self.playerLastKnownPos = nil
+					task.wait(0.2)
+				end)
 			else
-				self:StartNavigation(TEST_DESTINATION)
+				task.spawn(function()
+					print("im going going going")
+					self:StartNavigation(waypoints[math.random(1, #waypoints)].Position)
+				end)
 			end
 		end
 
-		task.wait(0.5)
+		task.wait(0.1)
 	end
 end
 
