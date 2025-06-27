@@ -4,26 +4,11 @@
     "$className": "DataModel",
 
     "ReplicatedStorage": {
-        "$path": "src/shared",
-      "UserHUD": {
-          "$path": "src/shared/UserHUD"
-      }
+        "$path": "src/shared"
     },
 
     "ServerScriptService": {
-        "$path": "src/server",
-      "MoneyManager": {
-        "$path": "src/server/MoneyManager"
-      },
-      "PowerSystem": {
-        "$path": "src/server/PowerSystem"
-      },
-      "PlayerItemDrag": {
-        "$path": "src/server/PlayerItemDrag"
-      },
-      "DoorSystem": {
-        "$path": "src/server/DoorSystem"
-      }
+        "$path": "src/server"
     },
 
     "ServerStorage": {
