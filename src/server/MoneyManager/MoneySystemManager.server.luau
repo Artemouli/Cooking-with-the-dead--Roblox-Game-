@@ -8,12 +8,10 @@ local decreaseMoney = game.ReplicatedStorage.MoneyRelatedEvents.DecreaseMoney
 
 local moneyAmount = 0
 
-
 addMoney.Event:Connect(function(amount)
 	moneyAmount = moneyAmount + amount
 	print("the current added amount of money " .. moneyAmount)
 end)
-
 
 decreaseMoney.Event:Connect(function(amount)
 	moneyAmount = moneyAmount - amount
