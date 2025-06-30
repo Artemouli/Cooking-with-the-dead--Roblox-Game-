@@ -11,12 +11,23 @@ local interactableDoors = interactables:FindFirstChild("Doors"):FindFirstChild("
 
 local traversalCosts = ReplicatedStorage:FindFirstChild("AI pathfinding Costs"):FindFirstChild("Monster AI Costs")
 
+local AI_STATES = {
+	{
+		Name = "idle",
+		Duration = 0,
+	},
+	PATROLLING = "patrolling",
+	CHASING = "chasing",
+	SEARCHING = "searching",
+}
+
 local DOOR_STATES = {
 	SupplyRoom = interactableDoors:FindFirstChild("SupplyRoomDoor"):FindFirstChild("DoorLocked"),
 	OrderRoom = interactableDoors:FindFirstChild("OrderBuyDoor"):FindFirstChild("DoorLocked"),
 	SecurityRoom = interactableDoors:FindFirstChild("SecurityRoomDoor"):FindFirstChild("DoorLocked"),
 }
 
+-- TODO, split waypoints into seperate waypoints, general bumming about waypoints, and waypoints within the restauraunt for when the monster is curious to explore
 local waypoints = workspace:FindFirstChild("AI Waypoints"):FindFirstChild("Monster Waypoints"):GetChildren()
 
 local TEST_DESTINATION = Vector3.new(-444.27, 1.5, 68.05)
