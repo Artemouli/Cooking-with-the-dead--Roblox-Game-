@@ -46,10 +46,11 @@ local function customerRecievesOrder(npcInstance, humanoid, npcSeatIndex, minWai
 end
 
 local function customerAi(npcInstance)
-	print("im here")
+	-- ensures that the giveItemConnection runs only once
+	local givenItemCheck = false
 
+	local chosenSeat = nil
 	local humanoid = npcInstance:WaitForChild("Humanoid")
-	local plateLocation = nil
 	local customerTask = CustomerCreateTask:Invoke()
 	customerTasks[npcInstance] = customerTask
 
@@ -58,6 +59,7 @@ local function customerAi(npcInstance)
 		npcInstance:Destroy()
 		return
 	end
+	print(seat.Parent.Name)
 	local destination = seat.Position
 
 	npcInstance.AncestryChanged:Connect(function(_, parent)
@@ -74,6 +76,10 @@ local function customerAi(npcInstance)
 
 	local giveItemConnection
 	giveItemConnection = giveItemEvent.Event:Connect(function(plateParent)
+		if givenItemCheck then
+			return
+		end
+
 		local isValid, reward = OrderValidator:Validate(plateParent, customerTask)
 		if not reward then
 			warn("Missing reward")
@@ -86,6 +92,7 @@ local function customerAi(npcInstance)
 			plateParent.PrimaryPart.CFrame = seat.Parent:FindFirstChild("PlateLocation").CFrame
 		end
 
+		givenItemCheck = true
 		if isValid then
 			addMoney:Fire(reward)
 			customerRecievesOrder(npcInstance, humanoid, seatIndex, 2, 5, plateParent)
@@ -104,7 +111,3 @@ end
 CollectionService:GetInstanceAddedSignal("Customer"):Connect(function(instance)
 	customerAi(instance)
 end)
-
-for _, customer in ipairs(CollectionService:GetTagged("Customer")) do
-	customerAi(customer)
-end

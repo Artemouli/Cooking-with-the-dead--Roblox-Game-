@@ -171,7 +171,7 @@ end
 
 function Monster:RunAI()
 	while self.instance do
-		print("running ai")
+		-- print("running ai")
 		self.instance.PrimaryPart:SetNetworkOwner(nil)
 
 		local target, distance = self:GetTarget()
@@ -188,7 +188,7 @@ function Monster:RunAI()
 				end)
 			else
 				task.spawn(function()
-					print("im going going going")
+					-- print("im going going going")
 					self:StartNavigation(waypoints[math.random(1, #waypoints)].Position)
 				end)
 			end
