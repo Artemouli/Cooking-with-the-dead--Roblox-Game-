@@ -69,8 +69,7 @@ local function customerAi(npcInstance)
 	end)
 
 	if PathHelper:Follow(npcInstance, destination) == true then
-		print("im sittin my ass down")
-
+		--print("im sittin my ass down")
 		seat:sit(humanoid)
 	end
 
