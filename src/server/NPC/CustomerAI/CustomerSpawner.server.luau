@@ -2,11 +2,10 @@
 local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 -- Settings
-local MAX_CUSTOMERS = 1
-local MIN_SPAWN_TIME = 3
-local MAX_SPAWN_TIME = 5
+local difficulty = require(ServerScriptService.DifficultySystem.DifficultyManager)
 
 -- References
 local customerModels = ReplicatedStorage:WaitForChild("Customers"):GetChildren()
@@ -16,13 +15,13 @@ local spawnPoints = waypoints:FindFirstChild("Customer Spawn Points"):GetChildre
 
 local customerAIFolder = workspace:FindFirstChild("AI bots"):FindFirstChild("Customer AI bots")
 
-local gameRunningFlag = workspace:WaitForChild("Game Functions"):WaitForChild("GameRunning")
+local gameRunningFlag = ServerScriptService:WaitForChild("Game Functions"):WaitForChild("GameRunning")
 
 -- Internal State
 local spawnLocations = {}
 local customerCount = 0
 local spawnTimer = 0
-local nextSpawnDelay = math.random(MIN_SPAWN_TIME, MAX_SPAWN_TIME)
+local nextSpawnDelay = math.random(difficulty.customerMinSpawnTime, difficulty.customerMaxSpawnTime)
 
 -- Preprocess spawn points
 for _, part in ipairs(spawnPoints) do
@@ -63,10 +62,10 @@ RunService.Heartbeat:Connect(function(dt)
 
 	spawnTimer += dt
 	if spawnTimer >= nextSpawnDelay then
-		if customerCount < MAX_CUSTOMERS then
+		if customerCount < difficulty.customerMaxAliveAmount then
 			SpawnCustomer()
 		end
 		spawnTimer = 0
-		nextSpawnDelay = math.random(MIN_SPAWN_TIME, MAX_SPAWN_TIME)
+		nextSpawnDelay = math.random(difficulty.customerMinSpawnTime, difficulty.customerMaxSpawnTime)
 	end
 end)

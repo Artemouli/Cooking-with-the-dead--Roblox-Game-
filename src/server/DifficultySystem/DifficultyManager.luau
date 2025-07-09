@@ -12,7 +12,9 @@ difficulty.customerInitialMaxAliveAmount = {
 	impossible = 14,
 }
 -- the max amount of customers that can be at the store
-difficulty.customerMaxAliveAmount = 3
+difficulty.customerMaxAliveAmount = 2
+difficulty.customerMinSpawnTime = 3
+difficulty.customerMaxSpawnTime = 5
 -- how harsh the consequences for the player giving the customer the wrong meal are
 difficulty.customerRatingDifficulty = {
 	easyDiminisher = 4,
@@ -33,7 +35,7 @@ function difficulty.CustomerIncreaseRecipeDifficulty()
 	-- if impossible recipes are already available, then make it so that they are the only recipes that are available
 	if difficulty.customerRecipeRequest.impRecipes then
 		-- loops through the recipes
-		for recipeKey, value in difficulty.customerRecipeRequest do
+		for recipeKey in difficulty.customerRecipeRequest do
 			-- if the recipeKey is not impossible, set to false
 			if recipeKey ~= difficultyEnum.IMPOSSIBLE then
 				difficulty.customerRecipeRequest[recipeKey] = false
