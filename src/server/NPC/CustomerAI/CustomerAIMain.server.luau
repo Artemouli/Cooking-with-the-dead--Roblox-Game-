@@ -9,6 +9,7 @@ local OrderValidator = require(ServerScriptService.NPC.CustomerAI.OrderValidator
 local difficulty = require(ServerScriptService.DifficultySystem.DifficultyManager)
 
 local CustomerCreateTask = ReplicatedStorage:FindFirstChild("CustomerEvents"):FindFirstChild("CustomerCreateTask")
+-- connected to PickupHandler.server.luau
 local giveItemEvent = ReplicatedStorage:FindFirstChild("CustomerEvents"):FindFirstChild("GiveCustomerItemEvent")
 local resetFoodEvent =
 	ReplicatedStorage:FindFirstChild("ItemDrag"):FindFirstChild("PlateEvents"):FindFirstChild("ResetFoodEvent")
@@ -25,17 +26,17 @@ local function changeDragDetector(plateParent, enable)
 	end
 end
 
-local function customerRecievesOrder(npcInstance, humanoid, npcSeatIndex, minWait, maxWait, plateParent)
+local function customerRecievesOrder(npcInstance, humanoid, npcSeat, minWait, maxWait, plateParent)
 	task.wait(math.random(minWait, maxWait))
-
+	print(npcInstance.Name)
 	humanoid.Sit = false
 	resetFoodEvent:Fire(plateParent, true)
+	humanoid.Seated:Wait()
 
-	local teleportSpot = SeatManager.Seats[npcSeatIndex].Parent:FindFirstChild("NpcTaskFinishTeleport")
+	local teleportSpot = npcSeat.Parent:FindFirstChild("NpcTaskFinishTeleport")
 	if teleportSpot then
 		npcInstance.HumanoidRootPart.CFrame = teleportSpot.CFrame
 	end
-	humanoid.Seated:Wait()
 
 	changeDragDetector(plateParent, true)
 	if plateParent.PrimaryPart then
@@ -43,6 +44,7 @@ local function customerRecievesOrder(npcInstance, humanoid, npcSeatIndex, minWai
 	end
 
 	task.wait(0.5)
+	SeatManager:Release(npcSeat)
 	PathHelper:Follow(npcInstance, ReturnHome)
 end
 
@@ -50,17 +52,15 @@ local function customerAi(npcInstance)
 	-- ensures that the giveItemConnection runs only once
 	local givenItemCheck = false
 
-	local chosenSeat = nil
 	local humanoid = npcInstance:WaitForChild("Humanoid")
 	local customerTask = CustomerCreateTask:Invoke()
 	customerTasks[npcInstance] = customerTask
 
-	local seat, seatIndex = SeatManager:GetAvailableSeat()
+	local seat = SeatManager:GetAvailableSeat()
 	if not seat then
 		npcInstance:Destroy()
 		return
 	end
-	print(seat.Parent.Name)
 	local destination = seat.Position
 
 	npcInstance.AncestryChanged:Connect(function(_, parent)
@@ -75,35 +75,38 @@ local function customerAi(npcInstance)
 	end
 
 	local giveItemConnection
-	giveItemConnection = giveItemEvent.Event:Connect(function(plateParent)
-		if givenItemCheck then
-			return
-		end
+	giveItemConnection = giveItemEvent.Event:Connect(function(plateParent, customer)
+		-- avoids all customers recieving food when only one should
+		if npcInstance == customer then
+			if givenItemCheck then
+				return
+			end
 
-		local isValid, reward = OrderValidator:Validate(plateParent, customerTask)
-		if not reward then
-			warn("Missing reward")
-			return
-		end
+			local isValid, reward = OrderValidator:Validate(plateParent, customerTask)
+			if not reward then
+				warn("Missing reward")
+				return
+			end
 
-		changeDragDetector(plateParent, false)
-		if plateParent.PrimaryPart then
-			plateParent.PrimaryPart.Anchored = true
-			plateParent.PrimaryPart.CFrame = seat.Parent:FindFirstChild("PlateLocation").CFrame
-		end
+			changeDragDetector(plateParent, false)
+			if plateParent.PrimaryPart then
+				plateParent.PrimaryPart.Anchored = true
+				plateParent.PrimaryPart.CFrame = seat.Parent:FindFirstChild("PlateLocation").CFrame
+			end
 
-		givenItemCheck = true
-		if isValid then
-			addMoney:Fire(reward)
-			customerRecievesOrder(npcInstance, humanoid, seatIndex, 2, 5, plateParent)
-		else
-			warn("Incorrect order")
-			addMoney:Fire(reward / 4)
-			customerRecievesOrder(npcInstance, humanoid, seatIndex, 5, 10, plateParent)
-		end
+			givenItemCheck = true
+			if isValid then
+				addMoney:Fire(reward)
+				customerRecievesOrder(npcInstance, humanoid, seat, 2, 5, plateParent)
+			else
+				warn("Incorrect order")
+				addMoney:Fire(reward / 4)
+				customerRecievesOrder(npcInstance, humanoid, seat, 5, 10, plateParent)
+			end
 
-		if giveItemConnection then
-			giveItemConnection:Disconnect()
+			if giveItemConnection then
+				giveItemConnection:Disconnect()
+			end
 		end
 	end)
 end

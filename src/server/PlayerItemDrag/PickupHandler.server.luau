@@ -69,9 +69,9 @@ local function onTouched(pickupable, grabbablePart, lastGrabbedPlayer)
 			and (grabbablePart.CollisionGroup == "PlateGroup" or grabbablePart.CollisionGroup == "TempPlateGroup")
 		then
 			if grabbablePart.CollisionGroup == "PlateGroup" then
-				giveItemEvent:Fire(grabbablePart.Parent)
+				giveItemEvent:Fire(grabbablePart.Parent, otherPart.Parent)
 			else
-				giveItemEvent:Fire(grabbablePart.Parent.Parent.Parent)
+				giveItemEvent:Fire(grabbablePart.Parent.Parent.Parent, otherPart.Parent.Parent.Parent)
 			end
 		end
 

@@ -16,7 +16,7 @@ function SeatManager:GetAvailableSeat()
 	for i, seat in ipairs(self.Seats) do
 		if seat.SeatClaimed and seat.SeatClaimed.Value == false then
 			seat.SeatClaimed.Value = true
-			return seat, i
+			return seat
 		end
 	end
 	return nil

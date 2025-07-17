@@ -41,6 +41,7 @@ end)
 
 -- Spawning logic
 local function SpawnCustomer()
+	print("Customer count " .. customerCount)
 	local template = customerModels[math.random(1, #customerModels)]
 	if not template:IsA("Model") then
 		return

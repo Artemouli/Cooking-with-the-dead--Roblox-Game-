@@ -9,7 +9,7 @@ local gameRunning = ServerScriptService["Game Functions"].GameRunning.Value
 task.spawn(function()
 	while true do
 		if gameRunning then
-			print("Gameplay loop is running")
+			--print("Gameplay loop is running")
 		end
 		task.wait(1)
 	end

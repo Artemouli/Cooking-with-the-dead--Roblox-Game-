@@ -38,11 +38,11 @@ function PathHelper:Follow(npc, destination)
 
 		-- npc has now reached the chair, returns true so that the npc can sit down now
 		if wp.Label == "UseChair" then
-			print("reached the chair!")
+			--print("reached the chair!")
 			return true
 		-- if the npc has reached the kill block, destroy the npc
 		elseif wp.Label == "DeleteCustomer" then
-			print("im boutta kms")
+			--print("im boutta kms")
 			npc:Destroy()
 			return true
 		end
