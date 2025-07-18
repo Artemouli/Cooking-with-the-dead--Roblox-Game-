@@ -4,16 +4,21 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local CustomerCreateTask = ReplicatedStorage:WaitForChild("CustomerEvents"):WaitForChild("CustomerCreateTask")
 
 local Recipes = require(ServerScriptService.Recipes.Recipes)
-local difficulty = require(ServerScriptService.DifficultySystem.DifficultyManager)
+local difficulty = require(ServerScriptService.DifficultySystem.CustomerDifficultyManager)
 
 -- Returns a customer order from a recipe
 local function CreateTask()
 	local recipeKeys = {}
 	for key, recipe in pairs(Recipes) do
-		-- check if the recipe is avaiable
+		-- check if the recipe is available
 		if difficulty.customerRecipeRequest[recipe.Difficulty] then
 			table.insert(recipeKeys, key)
 		end
+	end
+
+	if #recipeKeys == 0 then
+		warn("There are no available recipes that can be gathered")
+		return
 	end
 
 	local chosenRecipe = Recipes[recipeKeys[math.random(1, #recipeKeys)]]

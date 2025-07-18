@@ -8,7 +8,7 @@ local gameplayLoopTag = "GameplayFacilitator"
 
 for _, object in pairs(CollectionService:GetTagged(gameplayLoopTag)) do
 	object:FindFirstChild("Attachment"):FindFirstChild("ProximityPrompt").Triggered:Connect(function(player)
-		status = false
+		local status = false
 		if object.Name == "End Game" then
 			print("we ending")
 			status = false

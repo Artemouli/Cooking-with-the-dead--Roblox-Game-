@@ -23,16 +23,16 @@ local Recipes = {
 		},
 		Difficulty = difficultyEnum.EASY,
 	},
-	-- ["UltBurger"] = {
-	-- 	Money = 10000000,
-	-- 	Ingredients = {
-	-- 		{ Name = "Bun", Cooked = false, Quantity = 2 },
-	-- 		{ Name = "Lettuce", Cooked = false, Quantity = 1 },
-	-- 		{ Name = "Cheese", Cooked = false, Quantity = 1 },
-	-- 		{ Name = "MeatPatty", Cooked = true, Quantity = 1 },
-	-- 	},
-	--	Difficulty = difficultyEnum.MEDIUM,
-	-- },
+	["UltBurger"] = {
+		Money = 10000000,
+		Ingredients = {
+			{ Name = "Bun", Cooked = false, Quantity = 2 },
+			{ Name = "Lettuce", Cooked = false, Quantity = 1 },
+			{ Name = "Cheese", Cooked = false, Quantity = 1 },
+			{ Name = "MeatPatty", Cooked = true, Quantity = 1 },
+		},
+		Difficulty = difficultyEnum.MEDIUM,
+	},
 }
 
 return Recipes

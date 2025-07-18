@@ -5,7 +5,7 @@ local RunService = game:GetService("RunService")
 local ServerScriptService = game:GetService("ServerScriptService")
 
 -- Settings
-local difficulty = require(ServerScriptService.DifficultySystem.DifficultyManager)
+local difficulty = require(ServerScriptService.DifficultySystem.CustomerDifficultyManager)
 
 -- References
 local customerModels = ReplicatedStorage:WaitForChild("Customers"):GetChildren()
