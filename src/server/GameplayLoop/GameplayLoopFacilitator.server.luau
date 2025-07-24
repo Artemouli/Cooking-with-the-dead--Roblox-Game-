@@ -5,10 +5,14 @@ local DifficultyManager = ServerScriptService.DifficultySystem.CustomerDifficult
 
 -- game running events
 local workingCycleEvent = ReplicatedStorage.GameplayLoopEvents.WorkCycleEvent
-local gameRunning = ServerScriptService["Game Functions"].GameRunning.Value
+local gameRunning = ServerScriptService["Non-Scripts"]["Game Functions"].GameRunning.Value
 
--- how long the working cycle lasts for, in seconds
-local maxCycleLength = 10
+-- when the working cycle is over
+-- Causes all customers to immediately leave if they havent been served yet
+local allCustomersLeaveEvent = ReplicatedStorage:FindFirstChild("CustomerEvents")
+	:FindFirstChild("ImmediatelyLeaveEvent")
+-- how long the working cycle lasts for, in seconds (current default is 60)
+local maxCycleLength = ServerScriptService["Non-Scripts"]["Game Functions"].MaxCycleLength.Value
 -- current cycle
 local curCycleLength = maxCycleLength
 -- starts the working/closed cycle and keeps track of it

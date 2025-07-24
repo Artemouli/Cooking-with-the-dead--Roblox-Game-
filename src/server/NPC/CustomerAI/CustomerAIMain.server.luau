@@ -11,6 +11,8 @@ local difficulty = require(ServerScriptService.DifficultySystem.CustomerDifficul
 local CustomerCreateTask = ReplicatedStorage:FindFirstChild("CustomerEvents"):FindFirstChild("CustomerCreateTask")
 -- connected to PickupHandler.server.luau
 local giveItemEvent = ReplicatedStorage:FindFirstChild("CustomerEvents"):FindFirstChild("GiveCustomerItemEvent")
+-- connected to GameplayLoopFacilitator.server.luau, when the working day is over, all customers must leave immediately
+local workCycleChange = ReplicatedStorage:FindFirstChild("GameplayLoopEvents"):FindFirstChild("WorkCycleEvent")
 local resetFoodEvent =
 	ReplicatedStorage:FindFirstChild("ItemDrag"):FindFirstChild("PlateEvents"):FindFirstChild("ResetFoodEvent")
 local addMoney = ReplicatedStorage:WaitForChild("MoneyRelatedEvents"):WaitForChild("AddMoney")
@@ -26,21 +28,25 @@ local function changeDragDetector(plateParent, enable)
 	end
 end
 
+-- plateParent can be nil, if nil do not reset plates
 local function customerRecievesOrder(npcInstance, humanoid, npcSeat, minWait, maxWait, plateParent)
 	task.wait(math.random(minWait, maxWait))
 	print(npcInstance.Name)
 	humanoid.Sit = false
-	resetFoodEvent:Fire(plateParent, true)
+
+	if plateParent then
+		resetFoodEvent:Fire(plateParent, true)
+		changeDragDetector(plateParent, true)
+		if plateParent.PrimaryPart then
+			plateParent.PrimaryPart.Anchored = false
+		end
+	end
+
 	humanoid.Seated:Wait()
 
 	local teleportSpot = npcSeat.Parent:FindFirstChild("NpcTaskFinishTeleport")
 	if teleportSpot then
 		npcInstance.HumanoidRootPart.CFrame = teleportSpot.CFrame
-	end
-
-	changeDragDetector(plateParent, true)
-	if plateParent.PrimaryPart then
-		plateParent.PrimaryPart.Anchored = false
 	end
 
 	task.wait(0.5)
@@ -107,6 +113,20 @@ local function customerAi(npcInstance)
 			if giveItemConnection then
 				giveItemConnection:Disconnect()
 			end
+		end
+	end)
+	-- runs when the working day is over, or customers must immediately leave the restaraunt
+	local immediatelyLeaveConnection
+	immediatelyLeaveConnection = workCycleChange.Event:Connect(function(status)
+		-- if the working cycle is running, ignore this then
+		if status then
+			return
+		end
+
+		customerRecievesOrder(npcInstance, humanoid, seat, 2, 5, nil)
+
+		if immediatelyLeaveConnection then
+			immediatelyLeaveConnection:Disconnect()
 		end
 	end)
 end

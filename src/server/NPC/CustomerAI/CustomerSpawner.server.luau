@@ -15,7 +15,13 @@ local spawnPoints = waypoints:FindFirstChild("Customer Spawn Points"):GetChildre
 
 local customerAIFolder = workspace:FindFirstChild("AI bots"):FindFirstChild("Customer AI bots")
 
-local gameRunningFlag = ServerScriptService:WaitForChild("Game Functions"):WaitForChild("GameRunning")
+local workCycleChange = ReplicatedStorage:FindFirstChild("GameplayLoopEvents"):FindFirstChild("WorkCycleEvent")
+local gameRunning = true
+
+local workCycleChange = ReplicatedStorage:FindFirstChild("GameplayLoopEvents"):FindFirstChild("WorkCycleEvent")
+workCycleChange.Event:Connect(function(status)
+	gameRunning = status
+end)
 
 -- Internal State
 local spawnLocations = {}
@@ -57,7 +63,7 @@ end
 
 -- Main loop: runs once per frame but only does work if gameRunningFlag is true
 RunService.Heartbeat:Connect(function(dt)
-	if not gameRunningFlag.Value then
+	if not gameRunning then
 		return
 	end
 

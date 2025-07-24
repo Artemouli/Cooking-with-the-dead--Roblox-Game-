@@ -7,7 +7,9 @@ local addMoney = game.ReplicatedStorage.MoneyRelatedEvents.AddMoney
 -- Event that decreases money
 local decreaseMoney = game.ReplicatedStorage.MoneyRelatedEvents.DecreaseMoney
 
-local groupMoneyAmount = ServerScriptService:WaitForChild("Game Functions"):FindFirstChild("PlayerGroupTotalMoney")
+local groupMoneyAmount = ServerScriptService:WaitForChild("Non-Scripts")
+	:WaitForChild("Game Functions")
+	:FindFirstChild("PlayerGroupTotalMoney")
 
 addMoney.Event:Connect(function(amount)
 	groupMoneyAmount.Value = groupMoneyAmount.Value + amount
