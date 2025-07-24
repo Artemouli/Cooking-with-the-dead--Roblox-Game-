@@ -3,7 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TouchInputService = game:GetService("TouchInputService")
 
 -- game running events
-local workingCycleEvent = ReplicatedStorage.GameplayLoopEvents.WorkCycleStart
+local workingCycleEvent = ReplicatedStorage.GameplayLoopEvents.WorkCycleEvent
 local gameplayLoopTag = "GameplayFacilitator"
 
 for _, object in pairs(CollectionService:GetTagged(gameplayLoopTag)) do

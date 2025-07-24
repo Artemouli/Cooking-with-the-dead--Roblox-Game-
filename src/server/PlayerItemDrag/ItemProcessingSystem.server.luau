@@ -9,7 +9,7 @@ local removedOffPrepEvent = itemDragEvents:FindFirstChild("RemovedOffPrepEvent")
 
 --// Cooking Configuration
 local cookTimes = {
-	TestIngredient = 3
+	TestIngredient = 3,
 }
 
 --// Active Cooking Connections
@@ -17,7 +17,9 @@ local activeConnections = {}
 
 --// Handle Item Placed on Grill
 local function onPlacedOnPrep(pickupable, collisionGroup)
-	if collisionGroup ~= "Grill" then return end
+	if collisionGroup ~= "Grill" then
+		return
+	end
 
 	local foodPreps = pickupable:FindFirstChild("Food Preps")
 	if not foodPreps then
@@ -27,7 +29,9 @@ local function onPlacedOnPrep(pickupable, collisionGroup)
 	end
 
 	local cookedAmount = foodPreps:FindFirstChild("Cooked amount")
-	if not cookedAmount then return end
+	if not cookedAmount then
+		return
+	end
 
 	-- Disconnect previous connection if it exists
 	if activeConnections[pickupable] then
@@ -47,11 +51,25 @@ local function onPlacedOnPrep(pickupable, collisionGroup)
 
 		-- TODO: Add cooking/overcooked particle effects
 		if cookedAmount.Value >= cookTime + 2 then
-			print("Overcooked")
+			--print("Overcooked")
 			foodPreps:FindFirstChild("FoodRuined").Value = true
+			-- Changes the part object in the ingredient to black to show its overcooked
+			local state, error_message = pcall(function()
+				foodPreps.Parent:FindFirstChild("Object").BrickColor = BrickColor.new("Really black")
+			end)
+			if not state then
+				warn(error_message)
+			end
 		elseif cookedAmount.Value >= cookTime then
-			print("Fully cooked")
+			--print("Fully cooked")
 			foodPreps:FindFirstChild("FullCooked").Value = true
+			-- Changes the part object in the ingredient to brown to show its cooked
+			local state, error_message = pcall(function()
+				foodPreps.Parent:FindFirstChild("Object").BrickColor = BrickColor.new("Burnt Sienna")
+			end)
+			if not state then
+				warn(error_message)
+			end
 		end
 	end)
 end
@@ -64,7 +82,9 @@ local function onRemovedOffPrep(pickupable, collisionGroup)
 	end
 
 	local foodPreps = pickupable:FindFirstChild("Food Preps")
-	if not foodPreps then return end
+	if not foodPreps then
+		return
+	end
 
 	local cookedAmount = foodPreps:FindFirstChild("Cooked amount")
 	if cookedAmount then
