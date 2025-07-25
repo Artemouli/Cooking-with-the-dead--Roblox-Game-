@@ -9,7 +9,7 @@ local placedOnPrepEvent = itemDragEvents:FindFirstChild("PlacedOnPrepEvent")
 local removedOffPrepEvent = itemDragEvents:FindFirstChild("RemovedOffPrepEvent")
 
 -- ingredient info
-local ingredientInfo = require(ServerScriptService.Ingredients.IngredientInfo)
+local ingredientInfo = require(ReplicatedStorage.IngredientInfo.IngredientInfo)
 
 --// Active Cooking Connections
 local activeConnections = {}

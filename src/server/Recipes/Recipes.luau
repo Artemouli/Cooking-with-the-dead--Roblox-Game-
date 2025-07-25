@@ -1,6 +1,7 @@
 local ServerScriptService = game:GetService("ServerScriptService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local difficultyEnum = require(ServerScriptService.DifficultySystem.DifficultyEnum)
-local ingredientInfo = require(ServerScriptService.Ingredients.IngredientInfo)
+local ingredientInfo = require(ReplicatedStorage.IngredientInfo.IngredientInfo)
 
 local Recipes = {
 	-- ["CookedLettuce"] = {

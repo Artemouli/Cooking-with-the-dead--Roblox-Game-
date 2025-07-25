@@ -6,10 +6,10 @@ local UserInputService = game:GetService("UserInputService")
 local FREEZE_ACTION = "freezeMovement"
 local player = Players.LocalPlayer
 local BuyMenuGui = player:WaitForChild("PlayerGui"):WaitForChild("BuyMenu"):WaitForChild("BuyMenuGUI")
-local ShowBuyMenu = ReplicatedStorage:WaitForChild("UserHUD").DisplayBuyMenuEvent
+local displayBuyMenuEvent = ReplicatedStorage:WaitForChild("UserHUD").DisplayBuyMenuEvent
 
 -- if the buy menu should be displayed or not
-ShowBuyMenu.OnClientEvent:Connect(function(display)
+displayBuyMenuEvent.OnClientEvent:Connect(function(display)
 	BuyMenuGui.Enabled = display
 	if display then
 		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
@@ -20,6 +20,7 @@ ShowBuyMenu.OnClientEvent:Connect(function(display)
 			return Enum.ContextActionResult.Sink
 		end, false, unpack(Enum.PlayerActions:GetEnumItems()))
 	else
+		UserInputService.MouseIconEnabled = false
 		-- to unfreeze
 		ContextActionService:UnbindAction(FREEZE_ACTION)
 	end

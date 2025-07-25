@@ -4,6 +4,8 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+-- when displayBuyMenuEvent is fired as a server, only inputControl interacts with it,
+-- when it is fired as a client, This script recieves the input and then fires the displayBuyMenuEvent again as a server
 local DisplayBuyMenuEvent = ReplicatedStorage:WaitForChild("UserHUD"):WaitForChild("DisplayBuyMenuEvent")
 
 -- local Windows = ServerScriptService.UI.Windows
@@ -14,4 +16,8 @@ local OrderingLaptopUI =
 OrderingLaptopUI.Triggered:Connect(function(player)
 	DisplayBuyMenuEvent:FireClient(player, true)
 	-- local window = Windows:create(shopGui, UDim2.new(0.45, 0, 0.5, 0), "Frutiger Aero")
+end)
+
+DisplayBuyMenuEvent.OnServerEvent:Connect(function(player, instructions)
+	DisplayBuyMenuEvent:FireClient(player, false)
 end)
