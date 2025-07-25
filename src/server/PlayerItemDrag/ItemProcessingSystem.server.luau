@@ -1,16 +1,15 @@
 --// Services
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 --// Remote Events
 local itemDragEvents = ReplicatedStorage:FindFirstChild("ItemDrag")
 local placedOnPrepEvent = itemDragEvents:FindFirstChild("PlacedOnPrepEvent")
 local removedOffPrepEvent = itemDragEvents:FindFirstChild("RemovedOffPrepEvent")
 
---// Cooking Configuration
-local cookTimes = {
-	TestIngredient = 3,
-}
+-- ingredient info
+local ingredientInfo = require(ServerScriptService.Ingredients.IngredientInfo)
 
 --// Active Cooking Connections
 local activeConnections = {}
@@ -40,7 +39,7 @@ local function onPlacedOnPrep(pickupable, collisionGroup)
 	end
 
 	-- Begin Cooking if cook time exists for this item
-	local cookTime = cookTimes[pickupable.Name]
+	local cookTime = ingredientInfo.CookTime[pickupable.Name]
 	if not cookTime then
 		warn("No cooking time for this item: " .. pickupable.Name)
 		return

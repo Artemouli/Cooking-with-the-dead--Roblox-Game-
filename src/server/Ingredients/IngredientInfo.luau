@@ -9,9 +9,9 @@ local Ingredients = {
 Ingredients.CookTime = {
 	[Ingredients.TestIngredient] = 5,
 	[Ingredients.Lettuce] = 5,
-	[Ingredients.TestIngredient] = 5,
-	[Ingredients.TestIngredient] = 5,
-	[Ingredients.TestIngredient] = 5,
+	[Ingredients.Bun] = 5,
+	[Ingredients.Cheese] = 5,
+	[Ingredients.MeatPatty] = 5,
 }
 
 return Ingredients
