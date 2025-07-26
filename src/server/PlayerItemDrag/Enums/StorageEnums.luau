@@ -1,7 +1,7 @@
 -- storage types
 local StorageEnums = {
 	Plate = "Plate",
-	Pallet = "Pallet",
+	Pallet = "Pallet", -- New: Add Pallet enum
 }
 
 return StorageEnums

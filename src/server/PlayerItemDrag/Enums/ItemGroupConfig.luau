@@ -1,7 +1,7 @@
+-- ModuleScript: ItemGroupConfig
 local ServerScriptService = game:GetService("ServerScriptService")
 local StorageEnums = require(ServerScriptService.PlayerItemDrag.Enums.StorageEnums)
 
--- ModuleScript: ItemGroupConfig
 return {
 	Plate = {
 		collisionGroup = "PlateGroup",
@@ -9,9 +9,9 @@ return {
 		canBeGivenToNPC = true,
 	},
 	Pallet = {
-		collisionGroup = "Pallet",
+		collisionGroup = "PalletGroup", -- Corrected to "PalletGroup"
 		storageEnum = StorageEnums.Pallet,
-		canBeGivenToNPC = false,
+		canBeGivenToNPC = false, -- Pallets cannot be given to customers
 	},
-	-- Add more item types here
+	-- Add more item types here as needed
 }
