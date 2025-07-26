@@ -17,8 +17,6 @@ local function WeldParts(collidedContainer, pickupable)
 	local otherPart = pickupable:FindFirstChildWhichIsA("BasePart")
 	local weld = Instance.new("WeldConstraint")
 	weld.Parent = collidedContainer -- Weld to the base part of the container
-	warn("here")
-	warn(collidedContainer.Name)
 	weld.Part0 = collidedContainer
 	weld.Part1 = otherPart
 
@@ -40,8 +38,6 @@ end
 local function OnPlacedOnPlate(collidedContainerPart, pickupable, lastGrabbedPlayer)
 	-- collidedContainerPart can be the base part of the Plate or Pallet
 	local collidedContainerModel = collidedContainerPart.Parent
-
-	warn(collidedContainerModel.Name)
 
 	-- Check if the container is actually a Plate or Pallet
 	if not (collidedContainerModel:HasTag("Plate") or collidedContainerModel:HasTag("Pallet")) then

@@ -103,8 +103,7 @@ local function onTouched(pickupable, grabbablePart, lastGrabbedPlayer)
 				otherPart.CollisionGroup == "PlateGroup"
 				or otherPart.CollisionGroup == "TempPlateGroup"
 				or otherPart.CollisionGroup == "PalletGroup"
-			) -- New: Include PalletGroup
-			and grabbablePart.CollisionGroup == "DraggableGroup"
+			) and grabbablePart.CollisionGroup == "DraggableGroup"
 		then
 			if otherPart.CollisionGroup == "PlateGroup" or otherPart.CollisionGroup == "PalletGroup" then
 				placedOnPlateEvent:Fire(otherPart, pickupable, lastGrabbedPlayer)
