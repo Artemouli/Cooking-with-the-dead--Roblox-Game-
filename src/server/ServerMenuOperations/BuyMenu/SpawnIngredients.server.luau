@@ -6,6 +6,9 @@ local IngredientPallets = Workspace.Store["Ingredient Pallets"]
 -- ingredients
 local ingredientInfo = require(ReplicatedStorage.IngredientInfo.IngredientInfo)
 
+-- Event that decreases money
+local decreaseMoney = game.ReplicatedStorage.MoneyRelatedEvents.DecreaseMoney
+
 -- events
 local buyIngredientsEvent = ReplicatedStorage:WaitForChild("UserHUD").BuyMenuOperationEvents.BuyIngredientsEvent
 
@@ -13,8 +16,13 @@ local testPos = IngredientPallets.Parent.PalletSpawns
 
 -- takes in an input ingredient so that it can decide which ingredients to spawn
 buyIngredientsEvent.OnServerEvent:Connect(function(player, inputIngredient)
-	warn("Im gonna spawn a " .. inputIngredient)
-	local newTestPallet = IngredientPallets["carry pallet Spawn"]:Clone()
-	newTestPallet.Parent = Workspace.TestingItems.Carryables
-	newTestPallet:PivotTo(testPos.CFrame)
+	local bought = decreaseMoney:Fire(ingredientInfo.Price[inputIngredient])
+	if bought == true then
+		warn("Im gonna spawn a " .. inputIngredient)
+		local newTestPallet = IngredientPallets["carry pallet Spawn"]:Clone()
+		newTestPallet.Parent = Workspace.TestingItems.Carryables
+		newTestPallet:PivotTo(testPos.CFrame)
+	else
+		warn("Didnt buy")
+	end
 end)
