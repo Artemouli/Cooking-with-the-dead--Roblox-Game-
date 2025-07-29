@@ -20,7 +20,8 @@ displayBuyMenuEvent.OnClientEvent:Connect(function(display)
 			return Enum.ContextActionResult.Sink
 		end, false, unpack(Enum.PlayerActions:GetEnumItems()))
 	else
-		UserInputService.MouseIconEnabled = false
+		-- TODO: change user curser
+		UserInputService.MouseIconEnabled = true
 		-- to unfreeze
 		ContextActionService:UnbindAction(FREEZE_ACTION)
 	end
