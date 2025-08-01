@@ -29,6 +29,8 @@ local defaultBuyMenuIcon = "rbxassetid://7767269282"
 UserInputService.MouseIconEnabled = false
 UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
 
+crosshair.Visible = true
+
 -- change cursor when displaying buy menu, if opening the menu, show the old school one, if closing, show normal gameplay one
 displayBuyMenuEvent.OnClientEvent:Connect(function(display)
 	if display then

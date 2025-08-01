@@ -13,7 +13,8 @@ function Door:new(doorInstance)
 	instance.pathfindingModifier =
 		doorInstance:FindFirstChild("PathfindingModifierPart"):FindFirstChild("PathfindingModifier")
 	instance.lockButton = doorInstance:FindFirstChild("LockButton")
-	instance.proximityPrompt = instance.lockButton:FindFirstChild("Attachment"):FindFirstChild("LockInteraction")
+	-- instance.proximityPrompt = instance.lockButton:FindFirstChild("Attachment"):FindFirstChild("LockInteraction")
+	instance.ClickDetector = instance.lockButton:FindFirstChild("ClickDetector")
 
 	-- Events
 	instance.powerStateEvent = ReplicatedStorage.PowerRelatedEvents.PowerStateChange
@@ -34,8 +35,8 @@ function Door:new(doorInstance)
 	end
 
 	-- Connect proximity prompt triggered event with correct self binding
-	instance.proximityPrompt.Triggered:Connect(function(player)
-		instance:onProximityPromptTriggered(player)
+	instance.ClickDetector.MouseClick:Connect(function(player)
+		instance:onDoorButtonTriggered(player)
 	end)
 
 	-- Connect power state event with correct self binding
@@ -46,18 +47,18 @@ function Door:new(doorInstance)
 	return instance
 end
 
-function Door:onProximityPromptTriggered(player)
+function Door:onDoorButtonTriggered(player)
 	-- Change the LockedState for the door itself, not per player
-	print("TRIGGERED for", self.doorInstance.Name)
-	print("  lockedState:", self.lockedState and self.lockedState.Value)
-	print("  pathfindingModifier:", self.pathfindingModifier)
+	-- print("TRIGGERED for", self.doorInstance.Name)
+	-- print("  lockedState:", self.lockedState and self.lockedState.Value)
+	-- print("  pathfindingModifier:", self.pathfindingModifier)
 
 	if self.lockedState.Value == true then
 		self:unlockDoor()
 	elseif self.lockedState.Value == false then
 		self:lockDoor()
 	end
-	print("  AFTER: lockedState =", self.lockedState.Value)
+	-- print("  AFTER: lockedState =", self.lockedState.Value)
 end
 
 function Door:unlockDoor()
@@ -65,7 +66,7 @@ function Door:unlockDoor()
 	self.pathfindingModifier.PassThrough = true
 	self.doorInteractionEvent:Fire(false)
 	-- changes the text of the proximity prompt
-	self.proximityPrompt.ActionText = "lock"
+	--self.proximityPrompt.ActionText = "lock"
 	-- Unanchor all door parts to allow movement
 	for i, doorInfo in self.doorParts do
 		doorInfo.doorPart.Anchored = false
@@ -76,7 +77,7 @@ function Door:lockDoor()
 	self.lockedState.Value = true
 	self.pathfindingModifier.PassThrough = false
 	-- changes the text of the proximity prompt
-	self.proximityPrompt.ActionText = "unlock"
+	--self.proximityPrompt.ActionText = "unlock"
 	-- Reset door parts to their original CFrame and anchor them
 	for i, doorInfo in self.doorParts do
 		-- tweens the current position back to the original so it looks nice
