@@ -11,6 +11,10 @@ local plateEvents = itemDrag:FindFirstChild("PlateEvents")
 local placedOnPlateEvent = plateEvents:FindFirstChild("PlacedOnPlateEvent")
 local removedOffPlateEvent = plateEvents:FindFirstChild("RemovedOffPlateEvent")
 local giveItemEvent = ReplicatedStorage:WaitForChild("CustomerEvents"):FindFirstChild("GiveCustomerItemEvent")
+-- fires when a player's cursor hovers over a draggable or leaves it, calls PlayerCustomMouse.client.luau
+local HoveringOverDraggable = ReplicatedStorage:WaitForChild("UserHUD"):FindFirstChild("HoveringOverDraggable")
+-- fires when a player begins dragging an object, changes their cursor, calls PlayerCustomMouse.client.luau
+local DraggingAnObject = ReplicatedStorage:WaitForChild("UserHUD"):FindFirstChild("DraggingAnObject")
 
 -- New: Require ItemGroupConfig for dynamic configuration
 local ItemGroupConfig = require(game:GetService("ServerScriptService").PlayerItemDrag.Enums.ItemGroupConfig)
@@ -192,6 +196,9 @@ local function setupPickupable(pickupable)
 			grabbablePart.CollisionGroup = "DraggableGroup"
 		end
 
+		-- lets PlayerCustomMouse.client.luau know that the dragging crosshair should be shown
+		DraggingAnObject:FireClient(player, true)
+
 		local att = getLookAttachment(player)
 		if att and not grabbablePart.Parent:HasTag("NotInteractable") then
 			currentlyHolding = true
@@ -222,6 +229,9 @@ local function setupPickupable(pickupable)
 	end)
 
 	dragDetector.DragEnd:Connect(function(player)
+		-- lets PlayerCustomMouse.client.luau know that the crosshair should be reset
+		DraggingAnObject:FireClient(player, false)
+
 		currentlyHolding = false
 		resetPlayerCollisionGroup(player)
 		alignPos.Enabled = false
@@ -232,6 +242,14 @@ local function setupPickupable(pickupable)
 		if dragDetector.Enabled and not currentlyHolding and grabbablePart and grabbablePart.Parent then
 			grabbablePart:SetNetworkOwnershipAuto()
 		end
+	end)
+
+	dragDetector.MouseHoverEnter:Connect(function(player)
+		HoveringOverDraggable:FireClient(player, true)
+	end)
+
+	dragDetector.MouseHoverLeave:Connect(function(player)
+		HoveringOverDraggable:FireClient(player, false)
 	end)
 end
 
