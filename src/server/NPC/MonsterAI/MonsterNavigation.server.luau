@@ -1,4 +1,5 @@
 local CollectionService = game:GetService("CollectionService")
+local ServerScriptService = game:GetService("ServerScriptService")
 local PathFindingService = game:GetService("PathfindingService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
@@ -6,19 +7,37 @@ local Players = game:GetService("Players")
 local Monster = {}
 Monster.__index = Monster
 
+local WorkCycleEvent = ReplicatedStorage.GameplayLoopEvents.WorkCycleEvent
+
 local interactables = workspace:FindFirstChild("Interactables")
 local interactableDoors = interactables:FindFirstChild("Doors"):FindFirstChild("Interactable Doors")
 
 local traversalCosts = ReplicatedStorage:FindFirstChild("AI pathfinding Costs"):FindFirstChild("Monster AI Costs")
 
+local difficulty = require(ServerScriptService.DifficultySystem.CustomerDifficultyManager)
+
+-- these are used to declare what the ai should be doing right now
 local AI_STATES = {
-	{
+	IDLE = {
 		Name = "idle",
-		Duration = 0,
 	},
-	PATROLLING = "patrolling",
-	CHASING = "chasing",
-	SEARCHING = "searching",
+	PATROLLING = {
+		Name = "patrolling",
+		MinDuration = 0,
+		MaxDuration = 0,
+	},
+	-- runs when the patrolling timer is finished, the npc then pathfinds to
+	CURIOUS = {
+		Name = "curious",
+		MinDuration = 0,
+		MaxDuration = 0,
+	},
+	SEARCHING = {
+		Name = "searching",
+	},
+	CHASING = {
+		Name = "chasing",
+	},
 }
 
 local DOOR_STATES = {
@@ -28,9 +47,10 @@ local DOOR_STATES = {
 }
 
 -- TODO, split waypoints into seperate waypoints, general bumming about waypoints, and waypoints within the restauraunt for when the monster is curious to explore
-local waypoints = workspace:FindFirstChild("AI Waypoints"):FindFirstChild("Monster Waypoints"):GetChildren()
+local outsideWaypoints =
+	workspace:FindFirstChild("AI Waypoints"):FindFirstChild("Monster Waypoints"):FindFirstChild("Outside"):GetChildren()
 
-local TEST_DESTINATION = Vector3.new(-444.27, 1.5, 68.05)
+-- local TEST_DESTINATION = Vector3.new(-444.27, 1.5, 68.05)
 
 -- Class constructor
 function Monster.new(monsterInstance)
@@ -42,6 +62,9 @@ function Monster.new(monsterInstance)
 	self.navigating = false
 	self.currentTarget = nil
 	self.playerLastKnownPos = nil
+
+	-- keeps track of the current ai state
+	self.currentState = AI_STATES.IDLE
 
 	self.path = PathFindingService:CreatePath({
 		Costs = {
@@ -62,7 +85,7 @@ end
 -- Player detection
 function Monster:GetTarget()
 	local VISION_RANGE = 40
-	local ATTACK_RANGE = 15
+	local ATTACK_RANGE = 3
 
 	local origin = self.instance.Head.Position
 	local bestTarget, closestDistance = nil, VISION_RANGE
@@ -90,6 +113,10 @@ function Monster:GetTarget()
 			if fov < 0.6 then
 				continue
 			end
+		end
+
+		if ATTACK_RANGE > distance then
+			Monster:Attack(player)
 		end
 
 		local result = workspace:Raycast(origin, direction)
@@ -156,6 +183,11 @@ function Monster:StartNavigation(destination)
 	self:EndNavigation()
 end
 
+-- function that runs when a player is close enough to the monster
+function Monster:Attack(target)
+	warn("woah im attacking")
+end
+
 function Monster:IsDoorLocked(label)
 	if label == "UseDoorSupply" then
 		return DOOR_STATES.SupplyRoom.Value
@@ -174,14 +206,26 @@ function Monster:RunAI()
 		-- print("running ai")
 		self.instance.PrimaryPart:SetNetworkOwner(nil)
 
+		-- check for when the game starts
+		WorkCycleEvent.Event:Connect(function(active)
+			if active then
+				self.currentState = AI_STATES.PATROLLING
+			else
+				self.currentState = AI_STATES.IDLE
+			end
+		end)
 		local target, distance = self:GetTarget()
 		if target then
-			self.currentTarget = target
-			self.playerLastKnownPos = target.HumanoidRootPart.Position
-			self.humanoid:MoveTo(target.HumanoidRootPart.Position)
+			task.spawn(function()
+				self.currentState = AI_STATES.CHASING
+				self.currentTarget = target
+				self.playerLastKnownPos = target.HumanoidRootPart.Position
+				self.humanoid:MoveTo(target.HumanoidRootPart.Position)
+			end)
 		elseif not self.navigating then
 			if self.playerLastKnownPos then
 				task.spawn(function()
+					self.currentState = AI_STATES.SEARCHING
 					self:StartNavigation(self.playerLastKnownPos)
 					self.playerLastKnownPos = nil
 					task.wait(0.2)
@@ -189,7 +233,12 @@ function Monster:RunAI()
 			else
 				task.spawn(function()
 					-- print("im going going going")
-					self:StartNavigation(waypoints[math.random(1, #waypoints)].Position)
+					-- couldn't find the player, or just wandering
+					if self.currentState == AI_STATES.PATROLLING then
+						self:StartNavigation(outsideWaypoints[math.random(1, #outsideWaypoints)].Position)
+					elseif self.currentState == AI_STATES.SEARCHING then
+						print("So we searching now ")
+					end
 				end)
 			end
 		end
