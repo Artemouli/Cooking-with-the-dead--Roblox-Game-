@@ -50,6 +50,9 @@ local DOOR_STATES = {
 local outsideWaypoints =
 	workspace:FindFirstChild("AI Waypoints"):FindFirstChild("Monster Waypoints"):FindFirstChild("Outside"):GetChildren()
 
+local insideWaypoints =
+	workspace:FindFirstChild("AI Waypoints"):FindFirstChild("Monster Waypoints"):FindFirstChild("Inside"):GetChildren()
+
 -- local TEST_DESTINATION = Vector3.new(-444.27, 1.5, 68.05)
 
 -- Class constructor
@@ -201,15 +204,38 @@ function Monster:IsDoorLocked(label)
 	return false
 end
 
+-- handles monster decision making (e.g. deciding when to enter the curious stattet)
+function Monster:DecisionMaking()
+	-- Last case scenario, if monster fails to hit curious check, this will force the monster to enter the curious state
+	local forceCurious = 0
+
+	while self.instance and self.currentState ~= AI_STATES.IDLE do
+		-- checks to enter forceCurious
+		if (math.random(1, 10000) <= 20 and self.currentState == AI_STATES.PATROLLING) or forceCurious == 100000 then
+			self.currentState = AI_STATES.CURIOUS
+			warn("got lucky now im curious")
+		-- second check to increase forceCurious, does not increase forceCurious when chasing or searching
+		elseif math.random(1, 100) > 20 and self.currentState == AI_STATES.PATROLLING then
+			forceCurious += 1
+		end
+		-- waits a random amount of time between each decision
+		--TODO: make it so that the time between decisions is affected by difficulty
+		task.wait(math.random(1, 5))
+	end
+end
+
 function Monster:RunAI()
 	while self.instance do
-		-- print("running ai")
 		self.instance.PrimaryPart:SetNetworkOwner(nil)
 
 		-- check for when the game starts
 		WorkCycleEvent.Event:Connect(function(active)
 			if active then
 				self.currentState = AI_STATES.PATROLLING
+				-- allows the monster to start making decisions
+				task.spawn(function()
+					self:DecisionMaking()
+				end)
 			else
 				self.currentState = AI_STATES.IDLE
 			end
@@ -232,12 +258,12 @@ function Monster:RunAI()
 				end)
 			else
 				task.spawn(function()
-					-- print("im going going going")
 					-- couldn't find the player, or just wandering
 					if self.currentState == AI_STATES.PATROLLING then
 						self:StartNavigation(outsideWaypoints[math.random(1, #outsideWaypoints)].Position)
-					elseif self.currentState == AI_STATES.SEARCHING then
-						print("So we searching now ")
+					elseif self.currentState == AI_STATES.CURIOUS then
+						print("So we curious now ")
+						self:StartNavigation(insideWaypoints[math.random(1, #outsideWaypoints)].Position)
 					end
 				end)
 			end
