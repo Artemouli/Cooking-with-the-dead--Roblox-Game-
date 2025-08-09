@@ -75,6 +75,7 @@ function Monster.new(monsterInstance)
 			UseDoorOrder = traversalCosts:FindFirstChild("OrderRoomDoorCost").Value,
 			UseDoorSecurity = traversalCosts:FindFirstChild("SecurityRoomCost").Value,
 			UseRegularDoor = traversalCosts:FindFirstChild("RegularDoorCost").Value,
+			DontGo = math.huge,
 		},
 	})
 
@@ -207,20 +208,37 @@ end
 -- handles monster decision making (e.g. deciding when to enter the curious stattet)
 function Monster:DecisionMaking()
 	-- Last case scenario, if monster fails to hit curious check, this will force the monster to enter the curious state
-	local forceCurious = 0
+	self.forceCurious = 0
+	self.forceLeave = 0
 
 	while self.instance and self.currentState ~= AI_STATES.IDLE do
-		-- checks to enter forceCurious
-		if (math.random(1, 10000) <= 20 and self.currentState == AI_STATES.PATROLLING) or forceCurious == 100000 then
-			self.currentState = AI_STATES.CURIOUS
-			warn("got lucky now im curious")
-		-- second check to increase forceCurious, does not increase forceCurious when chasing or searching
-		elseif math.random(1, 100) > 20 and self.currentState == AI_STATES.PATROLLING then
-			forceCurious += 1
+		if self.currentState == AI_STATES.PATROLLING then
+			-- checks to enter forceCurious
+			-- 5% chance to become curious
+			-- math.random(100, 280)
+			if math.random(1, 1000) <= 50 or self.forceCurious >= 10 then
+				self.currentState = AI_STATES.CURIOUS
+				warn("now we curious " .. self.forceCurious)
+				self.forceCurious = 0
+			-- second check to increase forceCurious
+			else
+				self.forceCurious += 1
+			end
+
+			warn(self.forceCurious)
+
+			-- when monster is curious and is searching within the house, timer begins that steadily counts down
+		elseif self.currentState == AI_STATES.CURIOUS then
+			self.forceLeave += 1
+			warn(self.forceLeave)
+			if math.random(15, 45) <= self.forceLeave or self.forceLeave == 30 then
+				warn("im leaving now!!!")
+				self.currentState = AI_STATES.PATROLLING
+				self.forceLeave = 0
+			end
 		end
-		-- waits a random amount of time between each decision
 		--TODO: make it so that the time between decisions is affected by difficulty
-		task.wait(math.random(1, 5))
+		task.wait(math.random(1))
 	end
 end
 
@@ -228,14 +246,21 @@ function Monster:RunAI()
 	while self.instance do
 		self.instance.PrimaryPart:SetNetworkOwner(nil)
 
+		-- stops multiple DecisionMaking to run
+		self.decisionMakerRunning = false
+
 		-- check for when the game starts
 		WorkCycleEvent.Event:Connect(function(active)
 			if active then
-				self.currentState = AI_STATES.PATROLLING
-				-- allows the monster to start making decisions
-				task.spawn(function()
-					self:DecisionMaking()
-				end)
+				if not self.decisionMakerRunning then
+					print("active haha")
+					self.currentState = AI_STATES.PATROLLING
+					-- allows the monster to start making decisions
+					task.spawn(function()
+						self:DecisionMaking()
+					end)
+					self.decisionMakerRunning = true
+				end
 			else
 				self.currentState = AI_STATES.IDLE
 			end
@@ -254,7 +279,13 @@ function Monster:RunAI()
 					self.currentState = AI_STATES.SEARCHING
 					self:StartNavigation(self.playerLastKnownPos)
 					self.playerLastKnownPos = nil
-					task.wait(0.2)
+					task.wait(1.5)
+					-- chance to either go straight to the restaraunt or continue patrolling
+					if math.random(1, 100) <= 65 then
+						self.currentState = AI_STATES.PATROLLING
+					else
+						self.currentState = AI_STATES.SEARCHING
+					end
 				end)
 			else
 				task.spawn(function()
@@ -263,7 +294,7 @@ function Monster:RunAI()
 						self:StartNavigation(outsideWaypoints[math.random(1, #outsideWaypoints)].Position)
 					elseif self.currentState == AI_STATES.CURIOUS then
 						print("So we curious now ")
-						self:StartNavigation(insideWaypoints[math.random(1, #outsideWaypoints)].Position)
+						self:StartNavigation(insideWaypoints[math.random(1, #insideWaypoints)].Position)
 					end
 				end)
 			end

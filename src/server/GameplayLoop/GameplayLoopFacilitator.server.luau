@@ -19,7 +19,7 @@ local curCycleLength = maxCycleLength
 task.spawn(function()
 	while true do
 		if gameRunning then
-			print("Gameplay loop is running")
+			-- print("Gameplay loop is running")
 			curCycleLength -= 1
 			if curCycleLength <= 0 then
 				workingCycleEvent:Fire(false)

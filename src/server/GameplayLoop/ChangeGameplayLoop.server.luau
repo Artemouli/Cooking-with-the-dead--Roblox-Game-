@@ -16,6 +16,8 @@ for _, object in pairs(CollectionService:GetTagged(gameplayLoopTag)) do
 			print("we starting")
 			status = true
 		end
+		-- TODO: remove or change to improve solution
+		object:FindFirstChild("Attachment"):FindFirstChild("ProximityPrompt").Enabled = false
 		workingCycleEvent:fire(status)
 	end)
 end
