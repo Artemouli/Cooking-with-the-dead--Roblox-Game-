@@ -174,15 +174,18 @@ local function setupPickupable(pickupable)
 	end
 
 	-- aligns the position of the grabbable part
-	local posAtt = Instance.new("Attachment", grabbablePart)
-	local alignPos = Instance.new("AlignPosition", pickupable)
+	local posAtt = Instance.new("Attachment")
+	posAtt.Parent = grabbablePart
+	local alignPos = Instance.new("AlignPosition")
+	alignPos.Parent = pickupable
 	alignPos.Attachment0 = posAtt
 	alignPos.Enabled = false
 	alignPos.Responsiveness = 70
 	alignPos.MaxVelocity = 50
 	alignPos.MaxForce = 50000
 
-	local alignOrientation = Instance.new("AlignOrientation", pickupable)
+	local alignOrientation = Instance.new("AlignOrientation")
+	alignOrientation.Parent = pickupable
 	alignOrientation.Attachment0 = posAtt
 	alignOrientation.CFrame = initRotation
 	alignOrientation.Mode = 0

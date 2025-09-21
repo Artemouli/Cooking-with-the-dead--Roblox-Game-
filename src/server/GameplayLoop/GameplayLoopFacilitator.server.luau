@@ -1,18 +1,15 @@
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local TouchInputService = game:GetService("TouchInputService")
-local DifficultyManager = ServerScriptService.DifficultySystem.CustomerDifficultyManager
-
 -- game running events
 local workingCycleEvent = ReplicatedStorage.GameplayLoopEvents.WorkCycleEvent
 local gameRunning = ServerScriptService["Non-Scripts"]["Game Functions"].GameRunning
 
 -- when the working cycle is over
 -- Causes all customers to immediately leave if they havent been served yet
-local allCustomersLeaveEvent = ReplicatedStorage:FindFirstChild("CustomerEvents")
+local _allCustomersLeaveEvent = ReplicatedStorage:FindFirstChild("CustomerEvents")
 	:FindFirstChild("ImmediatelyLeaveEvent")
 
-local maxBreakCycleLength = ServerScriptService["Non-Scripts"]["Game Functions"].MaxBreakCycleLength
+local _maxBreakCycleLength = ServerScriptService["Non-Scripts"]["Game Functions"].MaxBreakCycleLength
 -- how long the working cycle lasts for, in seconds (current default is 60)
 local maxGameplayCycleLength = ServerScriptService["Non-Scripts"]["Game Functions"].MaxGameplayCycleLength
 -- current cycle

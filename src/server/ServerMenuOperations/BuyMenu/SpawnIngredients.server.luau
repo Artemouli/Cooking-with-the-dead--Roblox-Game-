@@ -1,5 +1,4 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ServerScriptService = game:GetService("ServerScriptService")
 local Workspace = game:GetService("Workspace")
 local IngredientPallets = Workspace.Store["Ingredient Pallets"]
 
@@ -15,7 +14,7 @@ local buyIngredientsEvent = ReplicatedStorage:WaitForChild("UserHUD").BuyMenuOpe
 local testPos = IngredientPallets.Parent.PalletSpawns
 
 -- takes in an input ingredient so that it can decide which ingredients to spawn
-buyIngredientsEvent.OnServerEvent:Connect(function(player, inputIngredient)
+buyIngredientsEvent.OnServerEvent:Connect(function(_player, inputIngredient)
 	local bought = decreaseMoney:Invoke(ingredientInfo.Price[inputIngredient])
 	if bought then
 		warn("Im gonna spawn a " .. inputIngredient)

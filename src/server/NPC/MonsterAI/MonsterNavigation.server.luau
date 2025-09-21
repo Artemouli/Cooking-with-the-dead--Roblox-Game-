@@ -265,7 +265,7 @@ function Monster:RunAI()
 				self.currentState = AI_STATES.IDLE
 			end
 		end)
-		local target, distance = self:GetTarget()
+		local target, _distance = self:GetTarget()
 		if target then
 			task.spawn(function()
 				self.currentState = AI_STATES.CHASING

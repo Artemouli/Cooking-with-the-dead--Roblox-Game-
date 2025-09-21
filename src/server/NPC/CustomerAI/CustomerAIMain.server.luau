@@ -6,7 +6,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local SeatManager = require(ServerScriptService.NPC.CustomerAI.SeatManager)
 local PathHelper = require(ServerScriptService.NPC.CustomerAI.PathHelper)
 local OrderValidator = require(ServerScriptService.NPC.CustomerAI.OrderValidator)
-local difficulty = require(ServerScriptService.DifficultySystem.CustomerDifficultyManager)
+local _difficulty = require(ServerScriptService.DifficultySystem.CustomerDifficultyManager)
 
 local CustomerCreateTask = ReplicatedStorage:FindFirstChild("CustomerEvents"):FindFirstChild("CustomerCreateTask")
 -- connected to PickupHandler.server.luau

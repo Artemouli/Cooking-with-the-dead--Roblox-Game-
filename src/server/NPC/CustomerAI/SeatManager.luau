@@ -13,7 +13,7 @@ for _, seatModel in ipairs(ChairsFolder:GetChildren()) do
 end
 
 function SeatManager:GetAvailableSeat()
-	for i, seat in ipairs(self.Seats) do
+	for _i, seat in ipairs(self.Seats) do
 		if seat.SeatClaimed and seat.SeatClaimed.Value == false then
 			seat.SeatClaimed.Value = true
 			return seat
