@@ -1,5 +1,3 @@
-local CollectionService = game:GetService("CollectionService")
-local RunService = game:GetService("RunService")
 local ServerScriptService = game:GetService("ServerScriptService")
 
 -- Event that adds Money
