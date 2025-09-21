@@ -254,6 +254,8 @@ local function setupPickupable(pickupable)
 	dragDetector.MouseHoverLeave:Connect(function(player)
 		HoveringOverDraggable:FireClient(player, false)
 	end)
+	-- satisfies luau that the function returns a value
+	return nil
 end
 
 -- Setup Existing and New Tagged Instances

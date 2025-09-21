@@ -14,7 +14,7 @@ local interactableDoors = interactables:FindFirstChild("Doors"):FindFirstChild("
 
 local traversalCosts = ReplicatedStorage:FindFirstChild("AI pathfinding Costs"):FindFirstChild("Monster AI Costs")
 
-local difficulty = require(ServerScriptService.DifficultySystem.CustomerDifficultyManager)
+local _difficulty = require(ServerScriptService.DifficultySystem.CustomerDifficultyManager)
 
 -- these are used to declare what the ai should be doing right now
 local AI_STATES = {
@@ -188,7 +188,7 @@ function Monster:StartNavigation(destination)
 end
 
 -- function that runs when a player is close enough to the monster
-function Monster:Attack(target)
+function Monster:Attack(_target)
 	warn("woah im attacking")
 end
 

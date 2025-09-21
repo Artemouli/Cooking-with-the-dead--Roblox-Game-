@@ -5,7 +5,7 @@ local player = game.Players.LocalPlayer
 local mouse = player:GetMouse()
 
 local BuyMenuGUI = player:WaitForChild("PlayerGui"):WaitForChild("BuyMenu"):WaitForChild("BuyMenuGUI")
-local TestShopFrame = BuyMenuGUI:WaitForChild("TestShopFrame")
+local _TestShopFrame = BuyMenuGUI:WaitForChild("TestShopFrame")
 
 local PlayerGUI = player:WaitForChild("PlayerGui"):WaitForChild("PlayerUI"):WaitForChild("PlayerGUI")
 -- replaces the users usual crosshair
@@ -22,7 +22,7 @@ local DraggingAnObject = ReplicatedStorage:WaitForChild("UserHUD"):FindFirstChil
 -- changes the default cursor when we are displaying the buy menu
 local displayBuyMenuEvent = ReplicatedStorage:WaitForChild("UserHUD").DisplayBuyMenuEvent
 
-local defaultCrosshairIcon = "http://www.roblox.com/asset/?id=4727466020"
+local _defaultCrosshairIcon = "http://www.roblox.com/asset/?id=4727466020"
 --local grabbingCrosshairIcon = "http://www.roblox.com/asset/?id=5036004544"
 local defaultBuyMenuIcon = "rbxassetid://7767269282"
 
@@ -48,8 +48,8 @@ end)
 -- follows the players mouse
 UserInputService.InputChanged:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseMovement then
-		crosshair.Position = UDim2.new(0, input.Position.X, 0, input.Position.Y)
-		grabIcon.Position = UDim2.new(0, input.Position.X, 0, input.Position.Y)
+		crosshair.Position = UDim2.fromOffset(input.Position.X, input.Position.Y)
+		grabIcon.Position = UDim2.fromOffset(input.Position.X, input.Position.Y)
 	end
 end)
 
