@@ -23,6 +23,7 @@ local function CreateTask()
 
 	local chosenRecipe = Recipes[recipeKeys[math.random(1, #recipeKeys)]]
 	local customerOrder = { Money = chosenRecipe.Money }
+	customerOrder["recipeName"] = chosenRecipe.RecipeNames[math.random(1, #chosenRecipe.RecipeNames)]
 
 	for _, ingredient in ipairs(chosenRecipe.Ingredients) do
 		customerOrder[ingredient.Name] = { Cooked = ingredient.Cooked, Quantity = ingredient.Quantity }

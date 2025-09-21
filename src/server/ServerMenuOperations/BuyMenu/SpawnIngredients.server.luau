@@ -19,7 +19,7 @@ buyIngredientsEvent.OnServerEvent:Connect(function(player, inputIngredient)
 	local bought = decreaseMoney:Invoke(ingredientInfo.Price[inputIngredient])
 	if bought then
 		warn("Im gonna spawn a " .. inputIngredient)
-		local newTestPallet = IngredientPallets["carry pallet Spawn"]:Clone()
+		local newTestPallet = IngredientPallets["carry pallet Test Ingredient"]:Clone()
 		newTestPallet.Parent = Workspace.TestingItems.Carryables
 		newTestPallet:PivotTo(testPos.CFrame)
 	else

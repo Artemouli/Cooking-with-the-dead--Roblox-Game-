@@ -15,7 +15,6 @@ local spawnPoints = waypoints:FindFirstChild("Customer Spawn Points"):GetChildre
 
 local customerAIFolder = workspace:FindFirstChild("AI bots"):FindFirstChild("Customer AI bots")
 
-local workCycleChange = ReplicatedStorage:FindFirstChild("GameplayLoopEvents"):FindFirstChild("WorkCycleEvent")
 local gameRunning = ServerScriptService["Non-Scripts"]["Game Functions"].GameRunning.Value
 
 local workCycleChange = ReplicatedStorage:FindFirstChild("GameplayLoopEvents"):FindFirstChild("WorkCycleEvent")

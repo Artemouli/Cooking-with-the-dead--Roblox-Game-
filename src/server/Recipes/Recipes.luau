@@ -17,6 +17,10 @@ local Recipes = {
 			{ Name = ingredientInfo.TestIngredient, Cooked = false, Quantity = 1 },
 		},
 		Difficulty = difficultyEnum.EASY,
+		RecipeNames = {
+			"That tasty test ingredient for me, JUST ONE or i will freak out",
+			"Gimmie just one of them test ingredients",
+		},
 	},
 	["x2TestIngredient"] = {
 		Money = 200,
@@ -24,6 +28,10 @@ local Recipes = {
 			{ Name = ingredientInfo.TestIngredient, Cooked = false, Quantity = 2 },
 		},
 		Difficulty = difficultyEnum.EASY,
+		RecipeNames = {
+			"TWOOOOOO",
+			"I WANT 2 I WANT 2 2 2 2 2 2 2 2 2 2 2 2 2 2",
+		},
 	},
 	["UltBurger"] = {
 		Money = 10000000,
@@ -34,6 +42,9 @@ local Recipes = {
 			{ Name = ingredientInfo.MeatPatty, Cooked = true, Quantity = 1 },
 		},
 		Difficulty = difficultyEnum.MEDIUM,
+		RecipeNames = {
+			"ultimate ULTIMATE",
+		},
 	},
 }
 

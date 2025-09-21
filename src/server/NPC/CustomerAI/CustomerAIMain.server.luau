@@ -11,6 +11,12 @@ local difficulty = require(ServerScriptService.DifficultySystem.CustomerDifficul
 local CustomerCreateTask = ReplicatedStorage:FindFirstChild("CustomerEvents"):FindFirstChild("CustomerCreateTask")
 -- connected to PickupHandler.server.luau
 local giveItemEvent = ReplicatedStorage:FindFirstChild("CustomerEvents"):FindFirstChild("GiveCustomerItemEvent")
+
+-- connected to customerSpeech.client.luau in src/client
+local CustomerSpeechEvent = ReplicatedStorage:FindFirstChild("CustomerEvents"):FindFirstChild("CustomerSpeechEvent")
+local CustomerStopSpeechEvent = ReplicatedStorage:FindFirstChild("CustomerEvents")
+	:FindFirstChild("CustomerStopSpeechEvent")
+
 -- connected to GameplayLoopFacilitator.server.luau, when the working day is over, all customers must leave immediately
 local workCycleChange = ReplicatedStorage:FindFirstChild("GameplayLoopEvents"):FindFirstChild("WorkCycleEvent")
 local resetFoodEvent =
@@ -78,6 +84,7 @@ local function customerAi(npcInstance)
 	if PathHelper:Follow(npcInstance, destination) == true then
 		--print("im sittin my ass down")
 		seat:sit(humanoid)
+		CustomerSpeechEvent:FireAllClients(npcInstance, customerTask.recipeName)
 	end
 
 	local giveItemConnection
@@ -104,10 +111,12 @@ local function customerAi(npcInstance)
 			if isValid then
 				addMoney:Fire(reward)
 				customerRecievesOrder(npcInstance, humanoid, seat, 2, 5, plateParent)
+				CustomerStopSpeechEvent:FireAllClients(npcInstance)
 			else
 				warn("Incorrect order")
 				addMoney:Fire(reward / 4)
 				customerRecievesOrder(npcInstance, humanoid, seat, 5, 10, plateParent)
+				CustomerStopSpeechEvent:FireAllClients(npcInstance)
 			end
 
 			if giveItemConnection then
