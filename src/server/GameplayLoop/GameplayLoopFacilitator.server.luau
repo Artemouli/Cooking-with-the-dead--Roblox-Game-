@@ -35,11 +35,9 @@ end)
 workingCycleEvent.Event:Connect(function(status)
 	curCycleLength.Value = maxGameplayCycleLength.Value
 	if status then
-		print("we working now")
 		gameRunning.Value = true
 	-- stop the working cycle
 	else
 		gameRunning.Value = false
-		warn("working cycle is over!!!")
 	end
 end)

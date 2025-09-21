@@ -5,6 +5,7 @@ function OrderValidator:Validate(plate, task)
 	local reward = task.Money or 0
 	local taskCopy = table.clone(task)
 	taskCopy["Money"] = nil
+	taskCopy["recipeName"] = nil
 
 	local ingredients = plate:FindFirstChild("Ingredients")
 	if not ingredients then
@@ -12,13 +13,9 @@ function OrderValidator:Validate(plate, task)
 		return false, reward
 	end
 
-	print(taskCopy)
-
 	for _, item in ipairs(ingredients:GetChildren()) do
 		local name = item.Name
-		print(name)
 		local cookedCorrectly = item:FindFirstChild("Food Preps") and item["Food Preps"].FullCooked.Value
-		print(cookedCorrectly)
 
 		-- accessing the task ingredient
 		local taskIngredient = taskCopy[name]
