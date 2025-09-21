@@ -3,6 +3,8 @@ local TextChatService = game:GetService("TextChatService")
 local CustomerSpeech = {}
 local activeSpeakers = {} -- [npcInstance] = true/false
 
+function CustomerSpeech.HandleNpcBubble(bubbleProperties: BubbleChatMessageProperties) end
+
 function CustomerSpeech.Start(npcInstance, text, interval)
 	interval = interval or 3
 	activeSpeakers[npcInstance] = true

@@ -7,7 +7,7 @@ local stopEvent = events:WaitForChild("CustomerStopSpeechEvent") -- server tells
 
 -- Start speaking
 customerSpeechEvent.OnClientEvent:Connect(function(npcInstance, recipeName)
-	CustomerSpeech.Start(npcInstance, recipeName, 3) -- repeat every 3 seconds
+	CustomerSpeech.Start(npcInstance, recipeName, 10) -- repeat every 10 seconds
 end)
 
 -- Stop speaking

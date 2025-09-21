@@ -11,10 +11,12 @@ local gameRunning = ServerScriptService["Non-Scripts"]["Game Functions"].GameRun
 -- Causes all customers to immediately leave if they havent been served yet
 local allCustomersLeaveEvent = ReplicatedStorage:FindFirstChild("CustomerEvents")
 	:FindFirstChild("ImmediatelyLeaveEvent")
+
+local maxBreakCycleLength = ServerScriptService["Non-Scripts"]["Game Functions"].MaxBreakCycleLength.Value
 -- how long the working cycle lasts for, in seconds (current default is 60)
-local maxCycleLength = ServerScriptService["Non-Scripts"]["Game Functions"].MaxCycleLength.Value
+local maxGameplayCycleLength = ServerScriptService["Non-Scripts"]["Game Functions"].MaxGameplayCycleLength.Value
 -- current cycle
-local curCycleLength = maxCycleLength
+local curCycleLength = ServerScriptService["Non-Scripts"]["Game Functions"].CurCycleLength.Value
 -- starts the working/closed cycle and keeps track of it
 task.spawn(function()
 	while true do
@@ -31,7 +33,7 @@ end)
 
 -- start or end the gameplayLoop
 workingCycleEvent.Event:Connect(function(status)
-	curCycleLength = maxCycleLength
+	curCycleLength = maxGameplayCycleLength
 	if status then
 		print("we working now")
 		gameRunning = true

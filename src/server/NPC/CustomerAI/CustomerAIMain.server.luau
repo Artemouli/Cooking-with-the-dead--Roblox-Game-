@@ -108,15 +108,14 @@ local function customerAi(npcInstance)
 			end
 
 			givenItemCheck = true
+			CustomerStopSpeechEvent:FireAllClients(npcInstance)
 			if isValid then
 				addMoney:Fire(reward)
 				customerRecievesOrder(npcInstance, humanoid, seat, 2, 5, plateParent)
-				CustomerStopSpeechEvent:FireAllClients(npcInstance)
 			else
 				warn("Incorrect order")
 				addMoney:Fire(reward / 4)
 				customerRecievesOrder(npcInstance, humanoid, seat, 5, 10, plateParent)
-				CustomerStopSpeechEvent:FireAllClients(npcInstance)
 			end
 
 			if giveItemConnection then
